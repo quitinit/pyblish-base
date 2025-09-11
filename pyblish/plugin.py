@@ -1361,14 +1361,13 @@ def discover(type=None, regex=None, paths=None):
             module.__file__ = abspath
 
             try:
-                with open(abspath, "rb") as f:
-                    code = compile(f.read(),abspath,"exec")
-                    six.exec_(code, module.__dict__)
-
                 # Store reference to original module, to avoid
                 # garbage collection from collecting it's global
                 # imports, such as `import os`.
                 sys.modules[abspath] = module
+                with open(abspath, "rb") as f:
+                    code = compile(f.read(),abspath,"exec")
+                    six.exec_(code, module.__dict__)
 
             except Exception as err:
                 log.error("Skipped: \"%s\" (%s)", mod_name, err)
